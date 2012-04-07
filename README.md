@@ -1,6 +1,6 @@
 # WeatherHacker
 
-Library for [http://weather.livedoor.com/weather_hacks/webservice.html](Livedoor Weather Web Service)
+Library for [Livedoor Weather Web Service](http://weather.livedoor.com/weather_hacks/webservice.html)
 
 ## Installation
 
