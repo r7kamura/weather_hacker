@@ -23,6 +23,13 @@ module WeatherHacker
       }
     end
 
+    private
+
+    # use HTTParty.get
+    def get(*args)
+      self.class.get(*args)
+    end
+
     # set @pref_by_city and @id_by_city
     def update_area_table
       hash = get AREA_TABLE_URL
@@ -38,13 +45,6 @@ module WeatherHacker
       city = canonical_city(hash["city"])
       pref = canonical_pref(hash["state"])
       id_by_city[city] || id_by_city[pref] || id_by_pref[pref]
-    end
-
-    private
-
-    # use HTTParty.get
-    def get(*args)
-      self.class.get(*args)
     end
 
     # return like following Hash
