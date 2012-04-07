@@ -3,13 +3,17 @@
 module WeatherHacker
   class Client
     include HTTParty
+
     WEATHER_URL    = "http://weather.livedoor.com/forecast/webservice/rest/v1"
     AREA_TABLE_URL = "http://weather.livedoor.com/forecast/rss/forecastmap.xml"
     ZIPCODE_URL    = "http://zip.cgis.biz/xml/zip.php"
 
     # get weather data by zipcode
-    def get_weather(zipcode)
-      get WEATHER_URL, :query => { :city => city_id_by_zipcode(zipcode) }
+    def get_weather(zipcode, opts = {})
+      city_id = city_id_by_zipcode(zipcode) or return
+      query   = { :city => city_id, :day => :today }.merge(opts)
+      hash    = get WEATHER_URL, :query => query
+      hash.to_hash
     end
 
     # set @pref_by_city and @id_by_city
@@ -24,7 +28,7 @@ module WeatherHacker
       return unless zipcode.match(/^\d{7}$/)
 
       hash = info_by_zipcode(zipcode)
-      city = hash["city"]
+      city = canonical_city(hash["city"])
       pref = canonical_pref(hash["state"])
       id_by_city[city] || id_by_city[pref] || id_by_pref[pref]
     end
@@ -101,7 +105,7 @@ module WeatherHacker
       raise ParseError, "Failed to parse area data from API"
     end
 
-    # Canonical prefecture name for Hokkaido
+    # canonical prefecture name
     # 道東 => 北海道
     # 道央 => 北海道
     # 道南 => 北海道
@@ -110,6 +114,11 @@ module WeatherHacker
       name = name.gsub(/^道.*/, "北海道")
       name = name.gsub(/[都道府県]$/, "")
       name
+    end
+
+    # canonical city name
+    def canonical_city(city)
+      city.gsub(/市$/, "")
     end
 
     # Custom Error class to raise in parse response from API

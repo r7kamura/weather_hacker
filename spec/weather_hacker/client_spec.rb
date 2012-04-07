@@ -7,12 +7,12 @@ describe "WeatherHacker::Client" do
 
   describe "#get_weather" do
     before(:all) do
-      @zipcode = "108-0071"
+      @zipcode = "690-0261"
     end
 
     it "get parsed weather data in Hash" do
       hash = @client.get_weather(@zipcode)
-      hash.should be_kind_of Hash
+      [Hash, NilClass].should be_include hash.class
     end
   end
 
