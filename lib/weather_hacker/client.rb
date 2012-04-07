@@ -6,18 +6,17 @@ module WeatherHacker
     base_uri "http://weather.livedoor.com/forecast/webservice/rest/v1"
     AREA_TABLE_URL = "http://weather.livedoor.com/forecast/rss/forecastmap.xml"
 
+    def initialize
+      @pref_by_city = {}
+      @id_by_city   = {}
+    end
+
     def get_weather(query)
       get "", :query => query
     end
 
-    # For example:
-    # {
-    #   "稚内" => 1,
-    #   "旭川" => 2,
-    #   "留萌" => 3,
-    #   ...
-    # }
-    def get_area_table
+    # set @pref_by_city and @id_by_city
+    def update_area_table
       hash = get AREA_TABLE_URL
       parse_area_table(hash)
     end
@@ -29,21 +28,20 @@ module WeatherHacker
     end
 
     def parse_area_table(hash)
-      {}.tap do |table|
-        hash["rss"]["channel"]["source"]["area"].each do |area|
-          prefs = [area["pref"]].flatten
-          prefs.each do |pref|
-            cities = [pref["city"]].flatten
-            cities.each do |city|
-              id    = city["id"].to_i
-              title = city["title"]
-              table[title] = id
-            end
+      hash["rss"]["channel"]["source"]["area"].each do |area|
+        prefs = [area["pref"]].flatten
+        prefs.each do |pref|
+          title = pref["title"]
+
+          cities = [pref["city"]].flatten
+          cities.each do |city|
+            id    = city["id"].to_i
+            title = city["title"]
+            @id_by_city[title] = id
+            @pref_by_city[title] = pref["title"]
           end
         end
       end
-    rescue
-      raise ParseError, "Failed to parse response"
     end
   end
 end

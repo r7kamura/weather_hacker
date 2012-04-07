@@ -16,10 +16,11 @@ describe "WeatherHacker::Client" do
     end
   end
 
-  describe "#get_area_table" do
-    it "get area id table" do
-      hash = @client.get_area_table
-      hash.should be_kind_of Hash
+  describe "#update_area_table" do
+    it "set area table" do
+      @client.update_area_table
+      @client.instance_variable_get(:@id_by_city).should be_kind_of Hash
+      @client.instance_variable_get(:@pref_by_city).should be_kind_of Hash
     end
   end
 end
