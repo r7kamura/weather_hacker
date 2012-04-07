@@ -101,7 +101,9 @@ module WeatherHacker
     # 道南 => 北海道
     # 道北 => 北海道
     def canonical_pref(name)
-      name.gsub(/^道.*/, "北海道")
+      name = name.gsub(/^道.*/, "北海道")
+      name = name.gsub(/[都道府県]$/, "")
+      name
     end
 
     class ParseError < StandardError; end
