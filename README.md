@@ -29,14 +29,14 @@ client.get_weather(zipcode)
 #     "temperature" => { "max" => "18", "min" => "1" }
 #   }
 
-client.get_weather(zipcode. :tomorrow)
+client.get_weather(zipcode, :day => :tomorrow)
 #=> {
 #         "weather" => "晴時々曇",
 #     "temperature" => { "max" => 21, "min" => 9 }
 #   }
 
 
-client.get_weather(zipcode. :dayaftertomorrow)
+client.get_weather(zipcode, :day => :dayaftertomorrow)
 #=> {
 #         "weather" => "晴時々曇",
 #     "temperature" => { "max" => nil, "min" => nil }
