@@ -5,7 +5,7 @@ module WeatherHacker
     class ParseError < StandardError; end
 
     include HTTParty
-    base_uri "http://weather.livedoor.com/forecast/webservice/rest/v1"
+    WEATHER_URL    = "http://weather.livedoor.com/forecast/webservice/rest/v1"
     AREA_TABLE_URL = "http://weather.livedoor.com/forecast/rss/forecastmap.xml"
 
     def initialize
@@ -14,7 +14,7 @@ module WeatherHacker
     end
 
     def get_weather(query)
-      get "", :query => query
+      get WEATHER_URL, :query => query
     end
 
     # set @pref_by_city and @id_by_city
