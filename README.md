@@ -1,6 +1,6 @@
 # WeatherHacker
 
-TODO: Write a gem description
+Library for [http://weather.livedoor.com/weather_hacks/webservice.html](Livedoor Weather Web Service)
 
 ## Installation
 
@@ -17,8 +17,31 @@ Or install it yourself as:
     $ gem install weather_hacker
 
 ## Usage
+~~~
+require "weather_hacker"
 
-TODO: Write usage instructions here
+zipcode = "690-0261"
+client  = WeatherHacker::Client.new
+
+client.get_weather(zipcode)
+#=> {
+#         "weather" => "晴れ",
+#     "temperature" => { "max" => "18", "min" => "1" }
+#   }
+
+client.get_weather(zipcode. :tomorrow)
+#=> {
+#         "weather" => "晴時々曇",
+#     "temperature" => { "max" => 21, "min" => 9 }
+#   }
+
+
+client.get_weather(zipcode. :tomorrow)
+#=> {
+#         "weather" => "晴時々曇",
+#     "temperature" => { "max" => nil, "min" => nil }
+#   }
+~~~
 
 ## Contributing
 
