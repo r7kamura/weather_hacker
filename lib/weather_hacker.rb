@@ -1,3 +1,5 @@
+require "httparty"
+
 require "weather_hacker/version"
 require "weather_hacker/client"
 
