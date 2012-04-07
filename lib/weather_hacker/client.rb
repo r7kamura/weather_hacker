@@ -8,11 +8,6 @@ module WeatherHacker
     WEATHER_URL    = "http://weather.livedoor.com/forecast/webservice/rest/v1"
     AREA_TABLE_URL = "http://weather.livedoor.com/forecast/rss/forecastmap.xml"
 
-    def initialize
-      @pref_by_city = {}
-      @id_by_city   = {}
-    end
-
     def get_weather(query)
       get WEATHER_URL, :query => query
     end
@@ -29,7 +24,24 @@ module WeatherHacker
       self.class.get(*args)
     end
 
+    def pref_by_city
+      @pref_by_city ||= begin
+        update_area_table
+        @pref_by_city
+      end
+    end
+
+    def id_by_city
+      @id_by_city ||= begin
+        update_area_table
+        @id_by_city
+      end
+    end
+
     def parse_area_table(hash)
+      @pref_by_city = {}
+      @id_by_city   = {}
+
       hash["rss"]["channel"]["source"]["area"].each do |area|
         prefs = [area["pref"]].flatten
         prefs.each do |pref|

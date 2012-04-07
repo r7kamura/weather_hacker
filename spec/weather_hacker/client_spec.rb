@@ -17,21 +17,15 @@ describe "WeatherHacker::Client" do
   end
 
   describe "#update_area_table" do
-    it "has empty area table at first" do
-      id_by_city   = @client.instance_variable_get(:@id_by_city)
-      pref_by_city = @client.instance_variable_get(:@pref_by_city)
-
-      id_by_city.keys.size.should == 0
-      pref_by_city.keys.size.should == 0
+    it "has not table at first" do
+      @client.instance_variable_get(:@id_by_city).should be_nil
+      @client.instance_variable_get(:@pref_by_city).should be_nil
     end
 
     it "has area table after call" do
       @client.update_area_table
-      id_by_city   = @client.instance_variable_get(:@id_by_city)
-      pref_by_city = @client.instance_variable_get(:@pref_by_city)
-
-      id_by_city.keys.size.should_not == 0
-      pref_by_city.keys.size.should_not == 0
+      @client.send(:id_by_city).keys.size.should_not == 0
+      @client.send(:pref_by_city).keys.size.should_not == 0
     end
   end
 end
