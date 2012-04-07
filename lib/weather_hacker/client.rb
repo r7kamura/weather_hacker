@@ -2,8 +2,6 @@
 
 module WeatherHacker
   class Client
-    class ParseError < StandardError; end
-
     include HTTParty
     WEATHER_URL    = "http://weather.livedoor.com/forecast/webservice/rest/v1"
     AREA_TABLE_URL = "http://weather.livedoor.com/forecast/rss/forecastmap.xml"
@@ -56,6 +54,8 @@ module WeatherHacker
           end
         end
       end
+    rescue
+      raise ParseError, "Failed to parse area data from API"
     end
 
     # Canonical prefecture name for Hokkaido
@@ -66,5 +66,7 @@ module WeatherHacker
     def canonical_pref(name)
       name.gsub(/^道.*/, "北海道")
     end
+
+    class ParseError < StandardError; end
   end
 end
