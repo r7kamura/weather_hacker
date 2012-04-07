@@ -28,4 +28,11 @@ describe "WeatherHacker::Client" do
       @client.send(:pref_by_city).keys.size.should_not == 0
     end
   end
+
+  describe "#city_id_by_zipcode" do
+    it "return city_id" do
+      city_id = @client.city_id_by_zipcode("108-0071")
+      city_id.should be_kind_of Integer
+    end
+  end
 end
