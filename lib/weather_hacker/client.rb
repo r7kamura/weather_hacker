@@ -7,6 +7,7 @@ module WeatherHacker
     AREA_TABLE_URL = "http://weather.livedoor.com/forecast/rss/forecastmap.xml"
     ZIPCODE_URL    = "http://zip.cgis.biz/xml/zip.php"
 
+    # TODO
     def get_weather(query)
       get WEATHER_URL, :query => query
     end
@@ -17,6 +18,7 @@ module WeatherHacker
       parse_area_table(hash)
     end
 
+    # return city id via zipcode API
     def city_id_by_zipcode(zipcode)
       zipcode = zipcode.to_s.tr("０-９", "0-9").tr("-", "").tr("-", "")
       return unless zipcode.match(/^\d{7}$/)
@@ -29,6 +31,7 @@ module WeatherHacker
 
     private
 
+    # use HTTParty.get
     def get(*args)
       self.class.get(*args)
     end
@@ -50,6 +53,7 @@ module WeatherHacker
       Hash[values.map { |v| v.to_a.flatten }]
     end
 
+    # update area table once
     def pref_by_city
       @pref_by_city ||= begin
         update_area_table
@@ -57,6 +61,7 @@ module WeatherHacker
       end
     end
 
+    # update area table once
     def id_by_city
       @id_by_city ||= begin
         update_area_table
@@ -73,6 +78,7 @@ module WeatherHacker
       }
     end
 
+    # parse area table hash of response from Weather API
     def parse_area_table(hash)
       @pref_by_city = {}
       @id_by_city   = {}
@@ -106,6 +112,7 @@ module WeatherHacker
       name
     end
 
+    # Custom Error class to raise in parse response from API
     class ParseError < StandardError; end
   end
 end
