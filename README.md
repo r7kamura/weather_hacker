@@ -36,7 +36,7 @@ client.get_weather(zipcode. :tomorrow)
 #   }
 
 
-client.get_weather(zipcode. :tomorrow)
+client.get_weather(zipcode. :dayaftertomorrow)
 #=> {
 #         "weather" => "晴時々曇",
 #     "temperature" => { "max" => nil, "min" => nil }
