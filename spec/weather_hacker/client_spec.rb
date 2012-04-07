@@ -1,9 +1,11 @@
 require "spec_helper"
 
 describe "WeatherHacker::Client" do
-  subject { WeatherHacker::Client }
+  before do
+    @client = WeatherHacker::Client.new
+  end
 
   it do
-    should be_true
+    @client.should be_true
   end
 end
