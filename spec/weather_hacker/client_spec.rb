@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require "spec_helper"
 
 describe "WeatherHacker::Client" do
@@ -6,13 +8,22 @@ describe "WeatherHacker::Client" do
   end
 
   describe "#get_weather" do
-    before(:all) do
-      @zipcode = "690-0261"
+    before do
+      zipcode = "690-0261"
+      @result = @client.get_weather(zipcode)
     end
 
     it "get parsed weather data in Hash" do
-      hash = @client.get_weather(@zipcode)
-      [Hash, NilClass].should be_include hash.class
+      [Hash, NilClass].should be_include @result.class
+    end
+
+    it "has weather" do
+      @result["weather"].should =~ /[晴曇雨]/
+    end
+
+    it "has max and min temperature" do
+      @result["temperature"].has_key?("max").should be_true
+      @result["temperature"].has_key?("min").should be_true
     end
   end
 

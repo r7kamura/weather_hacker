@@ -13,7 +13,14 @@ module WeatherHacker
       city_id = city_id_by_zipcode(zipcode) or return
       query   = { :city => city_id, :day => :today }.merge(opts)
       hash    = get WEATHER_URL, :query => query
-      hash.to_hash
+
+      {
+        "weather"     => hash["lwws"]["telop"],
+        "temperature" => {
+          "max" => hash["lwws"]["temperature"]["max"]["celsius"],
+          "min" => hash["lwws"]["temperature"]["min"]["celsius"],
+        },
+      }
     end
 
     # set @pref_by_city and @id_by_city
