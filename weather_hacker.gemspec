@@ -4,9 +4,9 @@ require File.expand_path('../lib/weather_hacker/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Ryo NAKAMURA"]
   gem.email         = ["r7kamura@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.description   = %q{Library for Livedoor Weather Web Service}
+  gem.summary       = %q{Library for Livedoor Weather Web Service}
+  gem.homepage      = "https://github.com/r7kamura/weather_hacker"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
