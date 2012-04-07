@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/r7kamura/weather_hacker.png?branch=master)](http://travis-ci.org/r7kamura/weather_hacker)
+
 # WeatherHacker
 
 Library for [Livedoor Weather Web Service](http://weather.livedoor.com/weather_hacks/webservice.html)
