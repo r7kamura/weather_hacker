@@ -14,4 +14,7 @@ Gem::Specification.new do |gem|
   gem.name          = "weather_hacker"
   gem.require_paths = ["lib"]
   gem.version       = WeatherHacker::VERSION
+
+  gem.add_dependency "httparty"
+  gem.add_development_dependency "rspec"
 end
