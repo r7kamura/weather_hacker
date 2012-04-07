@@ -5,12 +5,12 @@ require "spec_helper"
 describe "WeatherHacker::Client" do
   before do
     @client = WeatherHacker::Client.new
+    @zipcode = "690-0261"
   end
 
   describe "#get_weather" do
     before do
-      zipcode = "690-0261"
-      @result = @client.get_weather(zipcode)
+      @result = @client.get_weather(@zipcode)
     end
 
     it "get parsed weather data in Hash" do
@@ -42,7 +42,7 @@ describe "WeatherHacker::Client" do
 
   describe "#city_id_by_zipcode" do
     it "return city_id" do
-      city_id = @client.send(:city_id_by_zipcode, "108-0071")
+      city_id = @client.send(:city_id_by_zipcode, @zipcode)
       city_id.should be_kind_of Integer
     end
   end
