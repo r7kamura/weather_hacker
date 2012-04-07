@@ -7,9 +7,9 @@ module WeatherHacker
     AREA_TABLE_URL = "http://weather.livedoor.com/forecast/rss/forecastmap.xml"
     ZIPCODE_URL    = "http://zip.cgis.biz/xml/zip.php"
 
-    # TODO
-    def get_weather(query)
-      get WEATHER_URL, :query => query
+    # get weather data by zipcode
+    def get_weather(zipcode)
+      get WEATHER_URL, :query => { :city => city_id_by_zipcode(zipcode) }
     end
 
     # set @pref_by_city and @id_by_city
