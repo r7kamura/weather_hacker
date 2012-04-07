@@ -5,10 +5,6 @@ describe "WeatherHacker::Client" do
     @client = WeatherHacker::Client.new
   end
 
-  it do
-    @client.should be_true
-  end
-
   describe "#get_weather" do
     it "get parsed weather data in Hash" do
       hash = @client.get_weather(:city => 113)
