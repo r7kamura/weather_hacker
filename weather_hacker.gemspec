@@ -5,7 +5,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Ryo NAKAMURA"]
   gem.email         = ["r7kamura@gmail.com"]
   gem.description   = %q{Library for Livedoor Weather Web Service}
-  gem.summary       = %q{Library for Livedoor Weather Web Service}
+  gem.summary       = %q{Weather Forecaster via Livedoor Weather Web Service}
   gem.homepage      = "https://github.com/r7kamura/weather_hacker"
 
   gem.files         = `git ls-files`.split($\)
