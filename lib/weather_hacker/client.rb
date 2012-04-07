@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module WeatherHacker
   class Client
     class ParseError < StandardError; end
@@ -31,17 +33,26 @@ module WeatherHacker
       hash["rss"]["channel"]["source"]["area"].each do |area|
         prefs = [area["pref"]].flatten
         prefs.each do |pref|
-          title = pref["title"]
+          pref_name = canonical_pref(pref["title"])
 
           cities = [pref["city"]].flatten
           cities.each do |city|
             id    = city["id"].to_i
             title = city["title"]
             @id_by_city[title] = id
-            @pref_by_city[title] = pref["title"]
+            @pref_by_city[title] = pref_name
           end
         end
       end
+    end
+
+    # Canonical prefecture name for Hokkaido
+    # 道東 => 北海道
+    # 道央 => 北海道
+    # 道南 => 北海道
+    # 道北 => 北海道
+    def canonical_pref(name)
+      name.gsub(/^道.*/, "北海道")
     end
   end
 end
