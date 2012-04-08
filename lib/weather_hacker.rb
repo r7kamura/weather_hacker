@@ -10,9 +10,9 @@ class WeatherHacker
   end
 
   # define these methods
-  # * WeatherHacker#today(zipcode)
-  # * WeatherHacker#tomorrow(zipcode)
-  # * WeatherHacker#dayaftertomorrow(zipcode)
+  # * WeatherHacker#today
+  # * WeatherHacker#tomorrow
+  # * WeatherHacker#day_after_tomorrow
   [:today, :tomorrow, :day_after_tomorrow].each do |day|
     define_method(day) do
       @client.get_weather(@zipcode, :day => day.to_s.tr("_", ""))
