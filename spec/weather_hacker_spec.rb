@@ -5,8 +5,7 @@ require "spec_helper"
 
 describe "WeatherHacker" do
   before do
-    @zipcode = "690-0261"
-    @weather = WeatherHacker.new
+    @weather = WeatherHacker.new("690-0261")
   end
 
   shared_examples_for "WeatherResult" do
@@ -24,28 +23,28 @@ describe "WeatherHacker" do
   end
 
   describe "#today" do
-    subject { @weather.today(@zipcode) }
+    subject { @weather.today }
     it_should_behave_like "WeatherResult"
   end
 
   describe "#tomorrow" do
-    subject { @weather.today(@zipcode) }
+    subject { @weather.today }
     it_should_behave_like "WeatherResult"
   end
 
   describe "#day_after_tomorrow" do
-    subject { @weather.today(@zipcode) }
+    subject { @weather.today }
     it_should_behave_like "WeatherResult"
   end
 
   describe "#on" do
     context "when passed date in unavailable range" do
-      subject { @weather.on(Date.new(2000, 1, 1), @zipcode) }
+      subject { @weather.on(Date.new(2000, 1, 1)) }
       it { should be_nil }
     end
 
     context "when passed date in available range" do
-      subject { @weather.on(Date.today, @zipcode) }
+      subject { @weather.on(Date.today) }
       it_should_behave_like "WeatherResult"
     end
   end
