@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-module WeatherHacker
+class WeatherHacker
   class Client
     include HTTParty
 

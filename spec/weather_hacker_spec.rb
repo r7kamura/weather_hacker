@@ -1,9 +1,18 @@
+# encoding: UTF-8
+
 require "spec_helper"
 
 describe "WeatherHacker" do
-  subject { WeatherHacker }
+  before do
+    @zipcode = "690-0261"
+    @weather = WeatherHacker.new
+  end
 
-  it do
-    should be_true
+  describe "#initialize" do
+    it "should have client attribute" do
+      @weather.instance_variable_get(:@client).should_not be_nil
+    end
+  end
+
   end
 end
