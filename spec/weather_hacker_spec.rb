@@ -1,11 +1,20 @@
 # encoding: UTF-8
 
+require "date"
 require "spec_helper"
 
 describe "WeatherHacker" do
   before do
     @zipcode = "690-0261"
     @weather = WeatherHacker.new
+  end
+
+  shared_examples_for "WeatherResult" do
+    it "should have weather data" do
+      should be_kind_of Hash
+      should have_key "weather"
+      should have_key "temperature"
+    end
   end
 
   describe "#initialize" do
@@ -15,35 +24,29 @@ describe "WeatherHacker" do
   end
 
   describe "#today" do
-    before do
-      @result = @weather.today(@zipcode)
-    end
-    it "should return weather data on today" do
-      @result.should be_kind_of Hash
-      @result.should have_key "weather"
-      @result.should have_key "temperature"
-    end
+    subject { @weather.today(@zipcode) }
+    it_should_behave_like "WeatherResult"
   end
 
   describe "#tomorrow" do
-    before do
-      @result = @weather.tomorrow(@zipcode)
-    end
-    it "should return weather data on tomorrow" do
-      @result.should be_kind_of Hash
-      @result.should have_key "weather"
-      @result.should have_key "temperature"
-    end
+    subject { @weather.today(@zipcode) }
+    it_should_behave_like "WeatherResult"
   end
 
   describe "#day_after_tomorrow" do
-    before do
-      @result = @weather.day_after_tomorrow(@zipcode)
+    subject { @weather.today(@zipcode) }
+    it_should_behave_like "WeatherResult"
+  end
+
+  describe "#on" do
+    context "when passed date in unavailable range" do
+      subject { @weather.on(Date.new(2000, 1, 1), @zipcode) }
+      it { should be_nil }
     end
-    it "should return weather data on day ofter tomorrow" do
-      @result.should be_kind_of Hash
-      @result.should have_key "weather"
-      @result.should have_key "temperature"
+
+    context "when passed date in available range" do
+      subject { @weather.on(Date.today, @zipcode) }
+      it_should_behave_like "WeatherResult"
     end
   end
 end
