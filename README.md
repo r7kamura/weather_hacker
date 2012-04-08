@@ -19,36 +19,47 @@ Or install it yourself as:
     $ gem install weather_hacker
 
 ## Usage
-~~~
+Here's an example script to watch the weather forecast:
+
+```ruby
+# forecast.rb
 require "weather_hacker"
+require "yaml"
+require "date"
 
 zipcode = "690-0261"
 weather = WeatherHacker.new(zipcode)
 
-weather.on(Date.today)
-#=> {
-#         "weather" => "晴れ",
-#     "temperature" => { "max" => "18", "min" => "1" }
-#   }
+y weather.on(Date.today)
+y weather.today
+y weather.tomorrow
+y weather.day_after_tomorrow
+```
 
-weather.today
-#=> {
-#         "weather" => "晴れ",
-#     "temperature" => { "max" => "18", "min" => "1" }
-#   }
-
-weather.tomorrow
-#=> {
-#         "weather" => "晴時々曇",
-#     "temperature" => { "max" => 21, "min" => 9 }
-#   }
-
-weather.day_after_tomorrow
-#=> {
-#         "weather" => "晴時々曇",
-#     "temperature" => { "max" => nil, "min" => nil }
-#   }
-~~~
+```
+$ gem install weather_hacker
+$ ruby forecast.rb
+---
+weather: 晴れ
+temperature:
+  max: '18'
+  min: '1'
+---
+weather: 晴れ
+temperature:
+  max: '18'
+  min: '1'
+---
+weather: 晴時々曇
+temperature:
+  max: '18'
+  min: '2'
+---
+weather: 曇り
+temperature:
+  max: '21'
+  min: '9'
+```
 
 ## Contributing
 
