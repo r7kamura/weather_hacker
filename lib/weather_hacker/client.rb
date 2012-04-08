@@ -91,8 +91,8 @@ class WeatherHacker
 
     # parse area table hash of response from Weather API
     def parse_area_table(hash)
-      @pref_by_city = {}
-      @id_by_city   = {}
+      @pref_by_city ||= {}
+      @id_by_city   ||= {}
 
       hash["rss"]["channel"]["source"]["area"].each do |area|
         prefs = [area["pref"]].flatten
