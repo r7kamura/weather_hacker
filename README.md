@@ -23,22 +23,27 @@ Or install it yourself as:
 require "weather_hacker"
 
 zipcode = "690-0261"
-client  = WeatherHacker::Client.new
+weather = WeatherHacker.new(zipcode)
 
-client.get_weather(zipcode)
+weather.on(Date.today)
 #=> {
 #         "weather" => "晴れ",
 #     "temperature" => { "max" => "18", "min" => "1" }
 #   }
 
-client.get_weather(zipcode, :day => :tomorrow)
+weather.today
+#=> {
+#         "weather" => "晴れ",
+#     "temperature" => { "max" => "18", "min" => "1" }
+#   }
+
+weather.tomorrow
 #=> {
 #         "weather" => "晴時々曇",
 #     "temperature" => { "max" => 21, "min" => 9 }
 #   }
 
-
-client.get_weather(zipcode, :day => :dayaftertomorrow)
+weather.day_after_tomorrow
 #=> {
 #         "weather" => "晴時々曇",
 #     "temperature" => { "max" => nil, "min" => nil }
