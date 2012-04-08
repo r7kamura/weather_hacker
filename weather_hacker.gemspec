@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["r7kamura@gmail.com"]
   gem.description   = %q{Library for Livedoor Weather Web Service}
   gem.summary       = %q{Weather Forecaster via Livedoor Weather Web Service}
-  gem.homepage      = "https://github.com/r7kamura/weather_hacker"
+  gem.homepage      = "http://r7kamura.github.com/weather_hacker/"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
