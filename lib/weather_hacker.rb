@@ -19,6 +19,8 @@ class WeatherHacker
     end
   end
 
+  # return weather data on the received date
+  # if the date is not supported, return nil
   def on(date)
     now = Date.today
     {
