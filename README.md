@@ -27,13 +27,13 @@ require "weather_hacker"
 require "yaml"
 require "date"
 
-zipcode = "690-0261"
-weather = WeatherHacker.new(zipcode)
+zipcode  = "690-0261"
+forecast = WeatherHacker.new(zipcode)
 
-y weather.on(Date.today)
-y weather.today
-y weather.tomorrow
-y weather.day_after_tomorrow
+y forecast.on(Date.today)
+y forecast.today
+y forecast.tomorrow
+y forecast.day_after_tomorrow
 ```
 
 ```
