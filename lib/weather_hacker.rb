@@ -1,6 +1,7 @@
 require "httparty"
 
 require "weather_hacker/version"
+require "weather_hacker/area_data"
 require "weather_hacker/client"
 
 class WeatherHacker

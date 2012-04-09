@@ -30,12 +30,6 @@ class WeatherHacker
       self.class.get(*args)
     end
 
-    # set @pref_by_city and @id_by_city
-    def update_area_table
-      hash = get AREA_TABLE_URL
-      parse_area_table(hash)
-    end
-
     # return city id via zipcode API
     def city_id_by_zipcode(zipcode)
       zipcode = zipcode.to_s.tr("０-９", "0-9").tr("-", "").tr("-", "")
@@ -44,7 +38,10 @@ class WeatherHacker
       hash = info_by_zipcode(zipcode)
       city = canonical_city(hash["city"])
       pref = canonical_pref(hash["state"])
-      id_by_city[city] || id_by_city[pref] || id_by_pref[pref]
+
+      WeatherHacker::AreaData::ID_BY_CITY[city] ||
+      WeatherHacker::AreaData::ID_BY_CITY[pref] ||
+      WeatherHacker::AreaData::ID_BY_PREF[pref]
     end
 
     # return like following Hash
@@ -64,7 +61,23 @@ class WeatherHacker
       Hash[values.map { |v| v.to_a.flatten }]
     end
 
-    # update area table once
+    # canonical prefecture name
+    # 道東 => 北海道
+    # 道央 => 北海道
+    # 道南 => 北海道
+    # 道北 => 北海道
+    def canonical_pref(name)
+      name = name.gsub(/^道.*/, "北海道")
+      name = name.gsub(/[都道府県]$/, "")
+      name
+    end
+
+    # canonical city name
+    def canonical_city(city)
+      city.gsub(/市$/, "")
+    end
+
+    # use this wehn you want to update AreaData
     def pref_by_city
       @pref_by_city ||= begin
         update_area_table
@@ -72,12 +85,18 @@ class WeatherHacker
       end
     end
 
-    # update area table once
+    # use this wehn you want to update AreaData
     def id_by_city
       @id_by_city ||= begin
         update_area_table
         @id_by_city
       end
+    end
+
+    # set @pref_by_city and @id_by_city
+    def update_area_table
+      hash = get AREA_TABLE_URL
+      parse_area_table(hash)
     end
 
     # return typical city's id
@@ -110,22 +129,6 @@ class WeatherHacker
       end
     rescue
       raise ParseError, "Failed to parse area data from API"
-    end
-
-    # canonical prefecture name
-    # 道東 => 北海道
-    # 道央 => 北海道
-    # 道南 => 北海道
-    # 道北 => 北海道
-    def canonical_pref(name)
-      name = name.gsub(/^道.*/, "北海道")
-      name = name.gsub(/[都道府県]$/, "")
-      name
-    end
-
-    # canonical city name
-    def canonical_city(city)
-      city.gsub(/市$/, "")
     end
 
     # Custom Error class to raise in parse response from API
