@@ -24,10 +24,10 @@ class WeatherHacker
   # if the date is not supported, return nil
   def on(date)
     now = Date.today
-    {
-      now     => today,
-      now + 1 => tomorrow,
-      now + 2 => day_after_tomorrow,
-    }[date]
+    case date
+    when now + 0; today
+    when now + 1; tomorrow
+    when now + 2; day_after_tomorrow
+    end
   end
 end
