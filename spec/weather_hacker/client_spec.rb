@@ -9,22 +9,23 @@ describe "WeatherHacker::Client" do
   end
 
   describe "#get_weather" do
-    before do
-      @result = @client.get_weather(@zipcode)
+    let(:result) { @client.get_weather(@zipcode) }
+
+    context "when server returns expected response" do
+      it "should get parsed weather data in Hash" do
+        [Hash, NilClass].should be_include result.class
+      end
+
+      it "should have weather" do
+        result["weather"].should =~ /[晴曇雨]/
+      end
+
+      it "should have max and min temperature" do
+        result["temperature"].has_key?("max").should be_true
+        result["temperature"].has_key?("min").should be_true
+      end
     end
 
-    it "should get parsed weather data in Hash" do
-      [Hash, NilClass].should be_include @result.class
-    end
-
-    it "should have weather" do
-      @result["weather"].should =~ /[晴曇雨]/
-    end
-
-    it "should have max and min temperature" do
-      @result["temperature"].has_key?("max").should be_true
-      @result["temperature"].has_key?("min").should be_true
-    end
   end
 
   shared_examples_for "having area table" do
