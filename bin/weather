@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+require "awesome_print"
+require "date"
+
+zipcode = ARGV[0]
+unless zipcode
+  puts "Usage: weather [zipcode]"
+  exit!
+end
+
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+require "weather_hacker"
+
+forecast = WeatherHacker.new(zipcode)
+
+(0 .. 2).each do |i|
+  date = Date.today + i
+  puts date
+  ap forecast.on(date)
+  puts
+end
