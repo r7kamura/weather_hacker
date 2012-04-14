@@ -21,6 +21,8 @@ class WeatherHacker
           "min" => hash["lwws"]["temperature"]["min"]["celsius"],
         },
       }
+    rescue ParseError
+      nil
     end
 
     private
@@ -59,6 +61,8 @@ class WeatherHacker
       response = get ZIPCODE_URL, :query => { :zn => zipcode }
       values   = response["ZIP_result"]["ADDRESS_value"]["value"]
       Hash[values.map { |v| v.to_a.flatten }]
+    rescue NoMethodError
+      raise ParseError, "The zipcode is not supported by API"
     end
 
     # canonical prefecture name

@@ -26,6 +26,15 @@ describe "WeatherHacker::Client" do
       end
     end
 
+    context "when server returns unexpeced response" do
+      before do
+        @zipcode = "999-9999"
+      end
+
+      it do
+        result.should be_nil
+      end
+    end
   end
 
   shared_examples_for "having area table" do
