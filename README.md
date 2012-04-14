@@ -6,17 +6,9 @@ Library for [Livedoor Weather Web Service](http://weather.livedoor.com/weather_h
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'weather_hacker'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install weather_hacker
+```
+$ gem install weather_hacker
+```
 
 ## Usage
 Here's an example script to watch the weather forecast:
