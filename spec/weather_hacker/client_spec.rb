@@ -13,29 +13,29 @@ describe "WeatherHacker::Client" do
       @result = @client.get_weather(@zipcode)
     end
 
-    it "get parsed weather data in Hash" do
+    it "should get parsed weather data in Hash" do
       [Hash, NilClass].should be_include @result.class
     end
 
-    it "has weather" do
+    it "should have weather" do
       @result["weather"].should =~ /[晴曇雨]/
     end
 
-    it "has max and min temperature" do
+    it "should have max and min temperature" do
       @result["temperature"].has_key?("max").should be_true
       @result["temperature"].has_key?("min").should be_true
     end
   end
 
   shared_examples_for "having area table" do
-    it "has area table" do
+    it "should have area table" do
       @client.send(:id_by_city).keys.size.should_not == 0
       @client.send(:pref_by_city).keys.size.should_not == 0
     end
   end
 
   shared_examples_for "not having area table" do
-    it "has not area table" do
+    it "should have not area table" do
       @client.instance_variable_get(:@id_by_city).should be_nil
       @client.instance_variable_get(:@pref_by_city).should be_nil
     end
@@ -64,14 +64,14 @@ describe "WeatherHacker::Client" do
   end
 
   describe "#city_id_by_zipcode" do
-    it "return city_id" do
+    it "should return city_id" do
       city_id = @client.send(:city_id_by_zipcode, @zipcode)
       city_id.should be_kind_of Integer
     end
   end
 
   describe "#id_by_pref" do
-    it "is cached in instance variable" do
+    it "should be cached in instance variable" do
       @client.instance_variable_get(:@id_by_pref).should be_nil
       @client.send(:id_by_pref)
       @client.instance_variable_get(:@id_by_pref).should be_kind_of Hash
@@ -80,7 +80,7 @@ describe "WeatherHacker::Client" do
       @client.send(:id_by_pref)
     end
 
-    it "return table of id by pref" do
+    it "should return table of id by pref" do
       @client.send(:id_by_pref).should be_kind_of Hash
     end
   end
