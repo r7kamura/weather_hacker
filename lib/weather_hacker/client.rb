@@ -8,6 +8,11 @@ class WeatherHacker
     AREA_TABLE_URL = "http://weather.livedoor.com/forecast/rss/forecastmap.xml"
     ZIPCODE_URL    = "http://zip.cgis.biz/xml/zip.php"
 
+    # @city_id_by_zipcode is cached
+    def initialize
+      @city_id_by_zipcode = {}
+    end
+
     # get weather data by zipcode
     def get_weather(zipcode, opts = {})
       city_id = city_id_by_zipcode(zipcode) or return
@@ -34,13 +39,26 @@ class WeatherHacker
 
     # return city id via zipcode API
     def city_id_by_zipcode(zipcode)
-      zipcode = zipcode.to_s.tr("０-９", "0-9").tr("-", "").tr("-", "")
-      return unless zipcode.match(/^\d{7}$/)
+      zipcode = canonical_zipcode(zipcode)
+      return unless valid_zipcode?(zipcode)
 
-      hash = info_by_zipcode(zipcode)
-      city = canonical_city(hash["city"])
-      pref = canonical_pref(hash["state"])
+      @city_id_by_zipcode[zipcode] ||= begin
+        hash = info_by_zipcode(zipcode)
+        city = canonical_city(hash["city"])
+        pref = canonical_pref(hash["state"])
+        city_id_by_area(city, pref)
+      end
+    end
 
+    def canonical_zipcode(zipcode)
+      zipcode.to_s.tr("０-９", "0-9").tr("-", "").tr("-", "")
+    end
+
+    def valid_zipcode?(zipcode)
+      zipcode.match(/^\d{7}$/)
+    end
+
+    def city_id_by_area(city, pref)
       WeatherHacker::AreaData::ID_BY_CITY[city] ||
       WeatherHacker::AreaData::ID_BY_CITY[pref] ||
       WeatherHacker::AreaData::ID_BY_PREF[pref]
