@@ -4,8 +4,8 @@ class WeatherHacker
   class Client
     include HTTParty
 
-    WEATHER_URL    = "http://weather.livedoor.com/forecast/webservice/rest/v1"
-    AREA_TABLE_URL = "http://weather.livedoor.com/forecast/rss/forecastmap.xml"
+    WEATHER_URL    = "http://weather.livedoor.com/forecast/webservice/json/v1"
+    AREA_TABLE_URL = "http://weather.livedoor.com/forecast/rss/primary_area.xml"
     ZIPCODE_URL    = "http://zip.cgis.biz/xml/zip.php"
 
     # @city_id_by_zipcode is cached
@@ -15,17 +15,23 @@ class WeatherHacker
 
     # get weather data by zipcode
     def get_weather(zipcode, opts = {})
-      city_id = city_id_by_zipcode(zipcode) or return
-      query   = { :city => city_id, :day => :today }.merge(opts)
-      hash    = get WEATHER_URL, :query => query
+      city_id  = city_id_by_zipcode(zipcode) or return
+      query    = { :city => city_id }.merge(opts)
+      hash     = get WEATHER_URL, :query => query
+      forecast = get_forecast(hash, opts)
+
+      weather = forecast["telop"]
+      max = forecast["temperature"]["max"]
+      min = forecast["temperature"]["min"]
+      max_celsius = max["celsius"] unless max.nil?
+      min_celsius = min["celsius"] unless min.nil?
 
       {
-        "weather"     => hash["lwws"]["telop"],
+        "weather"     => weather,
         "temperature" => {
-          "max" => hash["lwws"]["temperature"]["max"]["celsius"],
-          "min" => hash["lwws"]["temperature"]["min"]["celsius"],
-        },
-      }
+        "max" => max_celsius,
+        "min" => min_celsius,
+      }}
     rescue ParseError
       nil
     end
@@ -37,6 +43,14 @@ class WeatherHacker
       self.class.get(*args)
     end
 
+    # return forecast hash
+    def get_forecast(hash, opts)
+      days    = ['today', 'tomorrow', 'dayaftertomorrow']
+      day_num = 0
+      day_num = days.find_index(opts['day']) unless opts['day'].nil?
+      hash['forecasts'][day_num]
+    end
+
     # return city id via zipcode API
     def city_id_by_zipcode(zipcode)
       zipcode = canonical_zipcode(zipcode)
@@ -46,7 +60,7 @@ class WeatherHacker
         hash = info_by_zipcode(zipcode)
         city = canonical_city(hash["city"])
         pref = canonical_pref(hash["state"])
-        city_id_by_area(city, pref)
+        city_id_by_area(city, pref).to_i
       end
     end
 
@@ -134,19 +148,15 @@ class WeatherHacker
     def parse_area_table(hash)
       @pref_by_city ||= {}
       @id_by_city   ||= {}
+      hash["rss"]["channel"]["source"]["pref"].each do |pref|
+        pref_name = canonical_pref(pref["title"])
 
-      hash["rss"]["channel"]["source"]["area"].each do |area|
-        prefs = [area["pref"]].flatten
-        prefs.each do |pref|
-          pref_name = canonical_pref(pref["title"])
-
-          cities = [pref["city"]].flatten
-          cities.each do |city|
-            id    = city["id"].to_i
-            title = city["title"]
-            @id_by_city[title] = id
-            @pref_by_city[title] = pref_name
-          end
+        cities = [pref["city"]].flatten
+        cities.each do |city|
+          id    = city["id"].to_i
+          title = city["title"]
+          @id_by_city[title] = id
+          @pref_by_city[title] = pref_name
         end
       end
     rescue
