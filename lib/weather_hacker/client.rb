@@ -18,7 +18,7 @@ class WeatherHacker
       city_id  = city_id_by_zipcode(zipcode) or return
       query    = { :city => city_id }.merge(opts)
       hash     = get WEATHER_URL, :query => query
-      forecast = get_forecast(hash, opts)
+      forecast = get_forecast(hash, opts) or return
 
       weather = forecast["telop"]
       max = forecast["temperature"]["max"]
@@ -47,7 +47,7 @@ class WeatherHacker
     def get_forecast(hash, opts)
       days    = ['today', 'tomorrow', 'dayaftertomorrow']
       day_num = 0
-      day_num = days.find_index(opts['day']) unless opts['day'].nil?
+      day_num = days.find_index(opts[:day]) unless opts[:day].nil?
       hash['forecasts'][day_num]
     end
 
