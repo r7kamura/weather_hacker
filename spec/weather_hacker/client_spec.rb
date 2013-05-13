@@ -37,6 +37,19 @@ describe "WeatherHacker::Client" do
     end
   end
 
+  describe "#get_forecast" do
+    hash = { 'forecasts' => ['today', 'tomorrow', 'dayaftertomorrow'] }
+    it "should return forecasts today" do
+      get_forecast = @client.send(:get_forecast, hash, {})
+      get_forecast.should == 'today'
+    end
+    ['today', 'tomorrow', 'dayaftertomorrow'].each {|day|
+      it "should return forecasts #{day}" do
+        @client.send(:get_forecast, hash, {:day => day}).should == day
+      end
+    }
+  end
+
   shared_examples_for "having area table" do
     it "should have area table" do
       @client.send(:id_by_city).keys.size.should_not == 0
